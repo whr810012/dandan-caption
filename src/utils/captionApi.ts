@@ -10,10 +10,17 @@ export type GeneratePayload = {
   model: string
 }
 
+/**
+ * 生产环境走 base 前缀：/caption/api/caption-gen
+ * 这样经 dandanhub 的 /caption/* 代理能打到文案站 Function，
+ * 而不会打到 hub 根路径 /api/caption-gen（会 404）。
+ */
 export function getCaptionApiUrl(): string {
   const configured = import.meta.env.VITE_CAPTION_API_URL as string | undefined
   if (configured?.trim()) return configured.trim()
-  return '/api/caption-gen'
+  const base = import.meta.env.BASE_URL || '/'
+  const normalized = base.endsWith('/') ? base : `${base}/`
+  return `${normalized}api/caption-gen`
 }
 
 export async function generateCaptions(payload: GeneratePayload): Promise<CaptionPlatformResult> {

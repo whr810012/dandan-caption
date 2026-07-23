@@ -22,6 +22,13 @@
   status = 200
   force = true
 
+# hub 代理后的完整路径：/caption/api/caption-gen
+[[redirects]]
+  from = "/caption/api/caption-gen"
+  to = "/.netlify/functions/caption-gen"
+  status = 200
+  force = true
+
 # Vite base=/caption/：把 /caption 映射到站点根
 [[redirects]]
   from = "/caption"
