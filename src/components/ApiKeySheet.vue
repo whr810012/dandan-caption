@@ -2,11 +2,16 @@
 import { computed, ref, watch } from 'vue'
 import {
   ARK_API_KEY_URL,
+  ARK_ENDPOINT_URL,
+  ARK_SEED21_MODEL_URL,
   ARK_VISION_DOC_URL,
+  DEFAULT_ARK_MODEL,
+  MODEL_PLACEHOLDER,
   getArkApiKey,
   getArkModel,
   setArkApiKey,
   setArkModel,
+  validateArkModel,
 } from '../utils/aiKeyStorage'
 
 const props = defineProps<{ open: boolean }>()
@@ -26,14 +31,20 @@ watch(
   { immediate: true },
 )
 
-const canSave = computed(() => apiKey.value.trim().length > 0)
+const modelError = computed(() => validateArkModel(model.value))
+const canSave = computed(() => apiKey.value.trim().length > 0 && !modelError.value)
 
 function save() {
   if (!canSave.value) return
   setArkApiKey(apiKey.value)
   setArkModel(model.value)
+  model.value = getArkModel()
   emit('saved')
   emit('close')
+}
+
+function useOfficialModel() {
+  model.value = DEFAULT_ARK_MODEL
 }
 </script>
 
@@ -44,17 +55,20 @@ function save() {
       <p class="mono">BYOK · VOLCENGINE ARK</p>
       <h2 id="key-title">填写你的方舟 Key</h2>
       <p class="lead">
-        Key 只保存在本机浏览器，请求经本站代理转发到火山方舟，不会写入我们的服务器配置。
+        按官方文档调用预置推理：API Key 填
+        <strong>密钥 Secret</strong>；模型填完整
+        <strong>Model ID</strong>（含版本号），例如
+        <code>{{ DEFAULT_ARK_MODEL }}</code>。
       </p>
 
       <label class="field">
-        <span>Ark API Key</span>
+        <span>Ark API Key（Secret）</span>
         <div class="row">
           <input
             v-model="apiKey"
             :type="showKey ? 'text' : 'password'"
             autocomplete="off"
-            placeholder="粘贴方舟 API Key"
+            placeholder="粘贴方舟 API Key 密钥"
           />
           <button class="btn btn--ghost btn--sm" type="button" @click="showKey = !showKey">
             {{ showKey ? '隐藏' : '显示' }}
@@ -63,14 +77,27 @@ function save() {
       </label>
 
       <label class="field">
-        <span>视觉模型 / 接入点 ID</span>
-        <input v-model="model" type="text" placeholder="如 doubao-1.5-vision-pro-32k-250115" />
+        <span>Model ID / 接入点 ID</span>
+        <input v-model="model" type="text" :placeholder="MODEL_PLACEHOLDER" />
+        <small class="hint">
+          官方示例使用
+          <code>{{ DEFAULT_ARK_MODEL }}</code>
+          （支持图片/视频理解）。也可填自建接入点
+          <code>ep-…</code>。
+          <a :href="ARK_SEED21_MODEL_URL" target="_blank" rel="noopener">打开 Seed-2.1-pro 详情</a>
+        </small>
+        <button class="btn btn--ghost btn--sm hint-btn" type="button" @click="useOfficialModel">
+          填入官方 Model ID
+        </button>
+        <small v-if="model.trim() && modelError" class="hint hint--error">{{ modelError }}</small>
       </label>
 
       <p class="links">
         <a :href="ARK_API_KEY_URL" target="_blank" rel="noopener">获取 API Key</a>
         ·
-        <a :href="ARK_VISION_DOC_URL" target="_blank" rel="noopener">视觉理解文档</a>
+        <a :href="ARK_ENDPOINT_URL" target="_blank" rel="noopener">接入点</a>
+        ·
+        <a :href="ARK_VISION_DOC_URL" target="_blank" rel="noopener">调用文档</a>
       </p>
 
       <div class="actions">
@@ -145,6 +172,13 @@ h2 {
   font-size: 0.95rem;
 }
 
+.lead code,
+.hint code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  word-break: break-all;
+}
+
 .field {
   display: grid;
   gap: 8px;
@@ -175,6 +209,22 @@ h2 {
 .row input {
   flex: 1;
   min-width: 0;
+}
+
+.hint {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.hint--error {
+  color: var(--color-accent-3);
+  font-weight: 600;
+}
+
+.hint-btn {
+  justify-self: start;
 }
 
 .links {

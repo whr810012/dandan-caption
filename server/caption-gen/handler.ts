@@ -1,4 +1,4 @@
-import { callArkVision, DEFAULT_MODEL } from './ark'
+import { callArkVision, resolveModelId } from './ark'
 import { estimateBase64Bytes } from './parse'
 import type { CaptionGenRequest, CaptionGenResponse, CaptionPlatformResult, HandlerEnv } from './types'
 
@@ -69,7 +69,7 @@ export async function handleCaptionGen(
     return { status: 200, body: { result: mockResult(tone), mock: true } }
   }
 
-  const model = (body.model || env.arkModel || DEFAULT_MODEL).trim()
+  const model = resolveModelId(body.model || env.arkModel)
 
   try {
     const result = await callArkVision({

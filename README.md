@@ -11,7 +11,11 @@ npm run dev:api   # http://127.0.0.1:8791/api/caption-gen
 npm run dev       # http://localhost:5173/caption/
 ```
 
-浏览器打开后先「配置 Key」，模型填你在方舟控制台创建的**视觉理解接入点 ID**。
+浏览器打开后先「配置 Key」：
+- **Ark API Key**：填 Secret（密钥），不是 Key ID
+- **模型**：填官方完整 Model ID `doubao-seed-2-1-pro-260628`（不要省略 `-260628`），或自建接入点 `ep-…`
+- 调用方式对齐官方 Chat Completions：`/api/v3/chat/completions` + `image_url` 多模态 content
+- 参考：[方舟调用文档](https://console.volcengine.com/ark/region:cn-beijing/docs/82379/1399008?lang=zh)
 
 本地可用 `apiKey=mock`（在设置里填 `mock`）跳过真实调用，返回示例文案。
 

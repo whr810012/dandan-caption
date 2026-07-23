@@ -10,8 +10,9 @@ body {
   min-height: 100%;
   overflow-x: clip;
   background:
-    radial-gradient(1200px 600px at 10% -10%, oklch(92% 0.08 95 / 0.7), transparent 55%),
-    radial-gradient(900px 500px at 100% 0%, oklch(90% 0.06 235 / 0.35), transparent 50%),
+    radial-gradient(900px 480px at 8% -8%, oklch(92% 0.09 95 / 0.85), transparent 55%),
+    radial-gradient(700px 420px at 96% 4%, oklch(90% 0.07 235 / 0.4), transparent 48%),
+    radial-gradient(500px 320px at 70% 100%, oklch(92% 0.06 18 / 0.22), transparent 50%),
     var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
@@ -38,7 +39,7 @@ a {
   align-items: center;
   justify-content: center;
   gap: 0.5em;
-  padding: 0.8rem 1.35rem;
+  padding: 0.85rem 1.4rem;
   border: 0;
   border-radius: var(--radius-pill);
   background: var(--btn-face);
@@ -60,7 +61,7 @@ a {
   transform: translateY(-2px);
   box-shadow:
     0 6px 0 0 var(--btn-edge),
-    0 10px 16px -4px var(--btn-cast);
+    0 12px 22px -4px var(--btn-cast);
 }
 
 .btn:active:not(:disabled) {
@@ -68,11 +69,13 @@ a {
   box-shadow:
     0 1px 0 0 var(--btn-edge),
     0 2px 6px -2px var(--btn-cast);
+  transition-duration: 70ms;
 }
 
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .btn--ink {
@@ -82,17 +85,29 @@ a {
   --btn-cast: oklch(20% 0.02 250 / 0.35);
 }
 
+.btn--pear {
+  --btn-face: var(--color-accent);
+  --btn-ink: var(--color-ink);
+  --btn-edge: var(--color-accent-deep);
+  --btn-cast: oklch(76% 0.2 95 / 0.45);
+}
+
 .btn--ghost {
-  --btn-face: var(--color-paper);
+  --btn-face: #fff;
   --btn-ink: var(--color-ink);
   --btn-edge: var(--color-line);
-  --btn-cast: oklch(20% 0.02 250 / 0.12);
+  --btn-cast: oklch(20% 0.02 250 / 0.1);
   border: 1px solid var(--color-line);
 }
 
 .btn--sm {
   padding: 0.5rem 0.95rem;
   font-size: 0.875rem;
+}
+
+.btn--lg {
+  padding: 1rem 1.6rem;
+  font-size: 1.05rem;
 }
 
 .btn--coral {
@@ -102,7 +117,26 @@ a {
   --btn-cast: oklch(68% 0.24 18 / 0.35);
 }
 
+.btn--block {
+  width: 100%;
+}
+
 .btn:focus-visible {
   outline: 3px solid var(--color-accent-2);
   outline-offset: 3px;
+}
+
+.btn__spin {
+  width: 1em;
+  height: 1em;
+  border: 2px solid color-mix(in oklab, currentColor 30%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

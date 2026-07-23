@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { generateCaptions, type CaptionPlatformResult } from '../utils/captionApi'
-import { getArkApiKey, getArkModel } from '../utils/aiKeyStorage'
+import { getArkApiKey, getArkModel, resolveArkModel, validateArkModel } from '../utils/aiKeyStorage'
 import { compressImageFile } from '../utils/mediaCompress'
 import { extractVideoFrames } from '../utils/videoFrames'
 
@@ -117,6 +117,14 @@ export const useWorkspaceStore = defineStore('workspace', () => {
       return
     }
 
+    const model = resolveArkModel(getArkModel())
+    const modelError = validateArkModel(model)
+    if (modelError) {
+      error.value = modelError
+      showKeySheet.value = true
+      return
+    }
+
     const images = items.value.flatMap((item) => item.payloads)
     if (images.length === 0) {
       error.value = '请先上传图片或视频'
@@ -135,7 +143,7 @@ export const useWorkspaceStore = defineStore('workspace', () => {
         tone: tone.value,
         mediaHint,
         apiKey,
-        model: getArkModel(),
+        model,
       })
     } catch (err) {
       error.value = err instanceof Error ? err.message : '生成失败'
