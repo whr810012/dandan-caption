@@ -15,9 +15,22 @@
   [headers.values]
     X-Content-Type-Options = "nosniff"
 
+# API → Function（须写在 SPA fallback 之前）
 [[redirects]]
   from = "/api/caption-gen"
   to = "/.netlify/functions/caption-gen"
+  status = 200
+  force = true
+
+# Vite base=/caption/：把 /caption 映射到站点根
+[[redirects]]
+  from = "/caption"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/caption/"
+  to = "/index.html"
   status = 200
 
 [[redirects]]

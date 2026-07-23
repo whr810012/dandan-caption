@@ -23,11 +23,17 @@ npm run dev       # http://localhost:5173/caption/
 
 见 `.env.example`。生产环境默认完全 BYOK，无需配置服务端 Key。
 
-## 部署
+## 部署（Netlify）
 
-- Vite `base: '/caption/'`
-- Netlify：`/api/caption-gen` → Function；`/caption/*` rewrite
-- 在 dandanhub 通过反向代理挂载 `/caption/`
+蛋蛋中心的 `/caption/` 会代理到 `https://dandan-caption.netlify.app/caption/`。
+**若尚未创建/部署该站点，访问 hub 上的「蛋蛋文案」会直接 404。**
+
+1. 在 Netlify 新建站点，根目录选 `dandan-caption`，Build `npm run build`，Publish `dist`
+2. 站点名尽量设为 `dandan-caption`（与 [dandanhub/netlify.toml](../dandanhub/netlify.toml) 代理一致）
+3. 部署成功后打开：`https://dandan-caption.netlify.app/caption/`
+4. 若子域不同，改 hub 里 `/caption/*` 的代理目标
+
+本地请用：`http://localhost:5173/caption/`（需同时 `npm run dev` + `npm run dev:api`）
 
 ## 技术要点
 
