@@ -1,0 +1,108 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow-x: clip;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, oklch(92% 0.08 95 / 0.7), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, oklch(90% 0.06 235 / 0.35), transparent 50%),
+    var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: var(--color-accent-2);
+}
+
+.btn {
+  --btn-face: var(--color-accent);
+  --btn-ink: var(--color-ink);
+  --btn-edge: var(--color-accent-deep);
+  --btn-cast: oklch(76% 0.2 95 / 0.45);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: 0.8rem 1.35rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--btn-face);
+  color: var(--btn-ink);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow:
+    0 4px 0 0 var(--btn-edge),
+    0 6px 12px -3px var(--btn-cast);
+  transform: translateY(0);
+  transition:
+    transform 140ms var(--ease-press),
+    box-shadow 140ms var(--ease-press),
+    background-color 160ms,
+    opacity 160ms;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 0 0 var(--btn-edge),
+    0 10px 16px -4px var(--btn-cast);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 0 var(--btn-edge),
+    0 2px 6px -2px var(--btn-cast);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--ink {
+  --btn-face: var(--color-ink);
+  --btn-ink: var(--color-paper);
+  --btn-edge: oklch(12% 0.02 250);
+  --btn-cast: oklch(20% 0.02 250 / 0.35);
+}
+
+.btn--ghost {
+  --btn-face: var(--color-paper);
+  --btn-ink: var(--color-ink);
+  --btn-edge: var(--color-line);
+  --btn-cast: oklch(20% 0.02 250 / 0.12);
+  border: 1px solid var(--color-line);
+}
+
+.btn--sm {
+  padding: 0.5rem 0.95rem;
+  font-size: 0.875rem;
+}
+
+.btn--coral {
+  --btn-face: var(--color-accent-3);
+  --btn-ink: #fff;
+  --btn-edge: oklch(55% 0.2 18);
+  --btn-cast: oklch(68% 0.24 18 / 0.35);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--color-accent-2);
+  outline-offset: 3px;
+}
